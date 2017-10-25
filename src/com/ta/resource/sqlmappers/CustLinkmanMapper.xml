@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ta.dao.CustLinkmanDao" >
+	<select id="queryCustomer" resultMap="Customer" parameterType="com.ta.bean.Customer" >
+		select * from ta_customer
+		<where>
+			<if test=" {id} != 0 ">
+				id = #{id}
+			</if>
+			<if test="{custName} != null ">
+				and cust_name like CONCAT('%',#{custName},'%')
+			</if>
+			<if test="{defaultLinkmanId} != 0">
+				and default_linkman_id = #{defaultLinkmanId}
+			</if>
+			<if test="{country} != null">
+				and country like CONCAT('%',#{country},'%')
+			</if>
+			<if test="{address} != null">
+				and address like CONCAT('%',#{address},'%')
+			</if>
+			<if test="{tele} != null">
+				and tele like CONCAT('%',#{tele},'%')
+			</if>
+		</where>
+	</select>
+	
+	<resultMap type="come.ta.bean.Customer" id="Customer">
+		<id column="id" property="id" />
+		<result column="cust_name" property="custName" />
+		<result column="default_linkman_id" property="defaultLinkmanId" />
+		<result column="country" property="country" />
+		<result column="address" property="address" />
+		<result column="tele" property="tele" />		
+	</resultMap>
+	
+	<insert id="addCustomer" parameterType="com.ta.bean.Customer" useGeneratedKeys="true" keyProperty="id" >
+		insert into ta_customer(cust_name,default_linkman_id,country,address,tele) 
+		values(#{custName},#{defaultLinkmanId},#{country},#{address},#{tele})
+	</insert>
+	
+	<update id="updateCustomer" parameterType="com.ta.bean.Customer">
+		update ta_customer set 
+			cust_Name = #{custName},
+			default_linkman_id = #{defaultLinkmanId},
+			country = #{country},
+			address = #{address},
+			tele = #{tele} 
+		where id = #{id};
+	</update>
+	
+	<delete id="deleteCustomer" parameterType="com.ta.bean.Customer">
+		delete from ta_customer where id = #{id}
+	</delete>
+</mapper>
